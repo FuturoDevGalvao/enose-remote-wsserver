@@ -1,0 +1,23 @@
+{
+  "name": "enose-wsserver",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./app/dist/wsserver.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "description": "",
+  "devDependencies": {
+    "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "@types/ws": "^8.5.11",
+    "@types/mysql": "^2.15.26",
+    "dotenv": "^16.4.5",
+    "mysql": "^2.18.1",
+    "ws": "^8.18.0"
+  }
+}
