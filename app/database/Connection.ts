@@ -1,4 +1,7 @@
 import mysql from "mysql";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export class Connection {
   private connection: mysql.Connection;
@@ -15,23 +18,36 @@ export class Connection {
     this.database = database;
   }
 
-  public start(credentials: { [key: string]: string | number }): boolean {
-    if (!credentials.user || !credentials.password) {
-      throw new Error("Credencias de acesso não localizadas.");
+  public start(credentials?: { [key: string]: string | number }): boolean {
+    let connectionConfig: { [key: string]: string | number };
+
+    if (credentials) {
+      if (!credentials.user || !credentials.password) {
+        throw new Error("Credencias de acesso não localizadas.");
+      }
+
+      this.user = credentials.user as string;
+      this.password = credentials.password as string;
+
+      connectionConfig = {
+        host: this.host,
+        port: this.port,
+        database: this.database,
+        user: this.user,
+        password: this.password,
+      };
+    } else {
+      this.user = process.env.DB_USER;
+      this.password = process.env.DB_PASS;
+
+      connectionConfig = {
+        host: this.host,
+        port: this.port,
+        database: this.database,
+        user: this.user,
+        password: this.password,
+      };
     }
-
-    const { user, password } = credentials;
-
-    this.user = user as string;
-    this.password = password as string;
-
-    const connectionConfig: { [key: string]: string | number } = {
-      host: this.host,
-      port: this.port,
-      database: this.database,
-      user: this.user,
-      password: this.password,
-    };
 
     this.connection = mysql.createConnection(connectionConfig);
 
@@ -64,14 +80,18 @@ export class Connection {
     for (const query of querys) yield query;
   }
 
-  public static getInstance(connectionConfig: { [key: string]: string | number }) {
-    if (!connectionConfig.host || !connectionConfig.port || !connectionConfig.database) {
-      throw new Error("Configurações de conexão não localizadas.");
+  public static getInstance(connectionConfig?: { [key: string]: string | number }) {
+    if (connectionConfig) {
+      if (!connectionConfig.host || !connectionConfig.port || !connectionConfig.database) {
+        throw new Error("Configurações de conexão não localizadas.");
+      }
+
+      const { host, port, database } = connectionConfig;
+
+      return new Connection(host as string, port as number, database as string);
     }
 
-    const { host, port, database } = connectionConfig;
-
-    return new Connection(host as string, port as number, database as string);
+    return new Connection(process.env.DB_HOST, Number.parseInt(process.env.DB_PORT), process.env.DB_NAME);
   }
 
   public close() {

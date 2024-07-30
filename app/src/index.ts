@@ -1,5 +1,5 @@
-import { Connection } from "./classes/Connection.js";
-import { wsserver } from "./wsserver.js";
+import { Connection } from "../database/Connection.js";
+import { wsserver } from "../server/wsserver.js";
 import dotenv from "dotenv";
 import url from "url";
 
