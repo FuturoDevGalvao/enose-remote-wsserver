@@ -80,7 +80,7 @@ export class Connection {
     for (const query of querys) yield query;
   }
 
-  public static getInstance(connectionConfig?: { [key: string]: string | number }) {
+  public static getInstance(connectionConfig?: { [key: string]: string | number }): Connection {
     if (connectionConfig) {
       if (!connectionConfig.host || !connectionConfig.port || !connectionConfig.database) {
         throw new Error("Configurações de conexão não localizadas.");

@@ -6,14 +6,14 @@ import url from "url";
 dotenv.config();
 
 const connection: Connection = Connection.getInstance({
-  host: process.env.MARIADB_HOST,
-  port: process.env.MARIADB_PORT,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
   database: process.env.DB_NAME,
 });
 
 const started: boolean = connection.start({
-  user: process.env.MARIADB_USER,
-  password: process.env.MARIADB_PASS,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
 });
 
 if (started) {
