@@ -24,7 +24,7 @@ if (started) {
                     results.push(result);
                 }
                 // Enviar os resultados da consulta para o cliente WebSocket
-                ws.send(JSON.stringify(results));
+                ws.send(JSON.stringify({ results }));
             }
             catch (error) {
                 console.error(error);
