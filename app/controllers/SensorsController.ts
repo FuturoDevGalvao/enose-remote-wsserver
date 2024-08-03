@@ -1,10 +1,11 @@
+import Sensor from "../database/entities/Sensor.js";
 import SensorsModel from "../models/SensorsModel.js";
-import { AbstractController } from "./AbstractController.js";
+import AbstractController from "./AbstractController.js";
 
 export default class SensorController extends AbstractController {
-  static get(id?: number): any {
-    if (id) return SensorsModel.getEspecifySensor(id);
+  static async get(id?: number): Promise<Array<Sensor> | Sensor> {
+    if (id) return await SensorsModel.getSpecifySensor(id);
 
-    return SensorsModel.getAllSensors();
+    return await SensorsModel.getAllSensors();
   }
 }
