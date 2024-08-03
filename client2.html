@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+  </head>
+  <body>
+    <output></output>
+    <input type="text" name="" id="" placeholder="informe uma mensagem para o wsserver" />
+
+    <script>
+      const input = document.querySelector("input");
+      const output = document.querySelector("output");
+
+      const wsclient = new WebSocket("ws://127.0.0.1:3000/users?id=1");
+
+      wsclient.addEventListener("open", () => {
+        console.log("Conexão WebSocket aberta.");
+      });
+
+      wsclient.addEventListener("message", (event) => {
+        console.log("Mensagem recebida do servidor: ", event.data);
+        output.append(`Servidor: ${event.data}`, document.createElement("br"));
+      });
+
+      input.addEventListener("keypress", (event) => {
+        if (event.code === "Enter") {
+          const value = input.value;
+          wsclient.send(value);
+          output.append(`Eu: ${value}`, document.createElement("br"));
+        }
+      });
+
+      setInterval(() => {
+        wsclient.send("");
+      }, 5000);
+    </script>
+  </body>
+</html>

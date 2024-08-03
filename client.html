@@ -13,7 +13,7 @@
       const input = document.querySelector("input");
       const output = document.querySelector("output");
 
-      const wsclient = new WebSocket("ws://127.0.0.1:3000/users");
+      const wsclient = new WebSocket("ws://127.0.0.1:3000/sensors?id=1");
 
       wsclient.addEventListener("open", () => {
         console.log("Conexão WebSocket aberta.");
