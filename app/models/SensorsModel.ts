@@ -1,24 +1,48 @@
-import { Connection } from "../database/Connection.js";
-import { AbstractModel } from "./AbstractModel.js";
+import Sensor from "../database/entities/Sensor.js";
+import AbstractModel from "./AbstractModel.js";
 
 export default class SensorsModel extends AbstractModel {
-  public static async getAllSensors() {
-    super.setup();
+  public static async getAllSensors(): Promise<Array<Sensor>> {
+    try {
+      this.setup();
 
-    if (super.status) {
-      for await (const query of super.connection.query("SELECT * FROM sensors")) {
-        console.log(query);
+      if (this.status) {
+        const sensors: Array<Sensor> = [];
+
+        for await (const sensorsQuery of this.connection.query("SELECT * FROM sensors")) {
+          sensorsQuery.forEach((sensor: any) => {
+            sensors.push(new Sensor(sensor.id, sensor.name));
+          });
+        }
+
+        return sensors;
       }
+
+      return [];
+    } catch (error) {
+      console.log(`Error: ${error}`);
+    } finally {
+      this.connection.close();
     }
   }
 
-  public static async getEspecifySensor(id: number): Promise<void> {
-    super.setup();
+  public static async getSpecifySensor(id: number): Promise<Sensor> {
+    try {
+      this.setup();
 
-    if (super.status) {
-      for await (const query of super.connection.query(`SELECT * FROM sensors WHERE id = ${id}`)) {
-        console.log(query);
+      if (this.status) {
+        for await (const sensorQuery of this.connection.query(
+          `SELECT * FROM sensors WHERE id = ${id}`
+        )) {
+          return new Sensor(sensorQuery[0].id, sensorQuery[0].name);
+        }
       }
+
+      return null;
+    } catch (error) {
+      console.log(`Error: ${error}`);
+    } finally {
+      this.connection.close();
     }
   }
 }

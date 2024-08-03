@@ -1,6 +1,6 @@
 import { Connection } from "../database/Connection.js";
 
-export abstract class AbstractModel {
+export default abstract class AbstractModel {
   protected static table: string;
   protected static connection: Connection;
   protected static status: boolean;

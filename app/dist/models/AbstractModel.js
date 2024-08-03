@@ -1,5 +1,5 @@
 import { Connection } from "../database/Connection.js";
-export class AbstractModel {
+export default class AbstractModel {
     static table;
     static connection;
     static status;
