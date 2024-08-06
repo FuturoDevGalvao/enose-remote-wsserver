@@ -36,8 +36,6 @@ wsserver.on("connection", async (ws, req) => {
       ws.send(`Error: ${error}`);
     }
   });
-
-  ws.send("Connected to WebSocket server!");
 });
 /* 
 setInterval(() => {

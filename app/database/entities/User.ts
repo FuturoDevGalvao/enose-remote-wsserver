@@ -22,6 +22,18 @@ export default class User {
     this.createdAt = createdAt;
   }
 
+  // Implementação do método toJSON
+  public toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+      emailValidated: this.emailValidated,
+      // Excluindo validationToken do JSON por razões de segurança
+      createdAt: this.createdAt.toISOString(), // Formata a data como uma string ISO
+    };
+  }
+
   public getId(): number {
     return this.id;
   }

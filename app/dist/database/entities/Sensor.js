@@ -5,6 +5,12 @@ export default class Sensor {
         this.id = id;
         this.name = name;
     }
+    toJSON() {
+        return {
+            id: this.id,
+            name: this.name,
+        };
+    }
     getId() {
         return this.id;
     }

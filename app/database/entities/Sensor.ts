@@ -7,6 +7,13 @@ export default class Sensor {
     this.name = name;
   }
 
+  public toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+    };
+  }
+
   public getId(): number {
     return this.id;
   }

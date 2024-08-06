@@ -13,6 +13,17 @@ export default class User {
         this.validationToken = validationToken;
         this.createdAt = createdAt;
     }
+    // Implementação do método toJSON
+    toJSON() {
+        return {
+            id: this.id,
+            name: this.name,
+            email: this.email,
+            emailValidated: this.emailValidated,
+            // Excluindo validationToken do JSON por razões de segurança
+            createdAt: this.createdAt.toISOString(), // Formata a data como uma string ISO
+        };
+    }
     getId() {
         return this.id;
     }
