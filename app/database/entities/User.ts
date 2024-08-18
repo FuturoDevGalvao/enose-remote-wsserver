@@ -30,7 +30,7 @@ export default class User {
       email: this.email,
       emailValidated: this.emailValidated,
       // Excluindo validationToken do JSON por razões de segurança
-      createdAt: this.createdAt.toISOString(), // Formata a data como uma string ISO
+      createdAt: this.createdAt, // Formata a data como uma string ISO
     };
   }
 

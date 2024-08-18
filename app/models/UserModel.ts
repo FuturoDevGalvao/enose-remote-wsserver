@@ -24,7 +24,7 @@ export default class UserModel extends AbstractModel {
                 user.email,
                 user.email_validated,
                 user.validation_token,
-                new Date(user.createdAt)
+                new Date(user.created_at)
               )
             );
           });
@@ -53,9 +53,9 @@ export default class UserModel extends AbstractModel {
             userQuery[0].id,
             userQuery[0].name,
             userQuery[0].email,
-            userQuery[0].emailValidated,
-            userQuery[0].validationToken,
-            new Date(userQuery[0].createdAt)
+            userQuery[0].email_validated,
+            userQuery[0].validation_token,
+            new Date(userQuery[0].created_at)
           );
         }
       }
