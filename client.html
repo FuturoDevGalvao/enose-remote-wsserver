@@ -13,7 +13,18 @@
       const input = document.querySelector("input");
       const output = document.querySelector("output");
 
-      const wsclient = new WebSocket("ws://127.0.0.1:3000/sensors?id=1");
+      const readers = {
+        MQ5: {
+          active: true,
+          readers: [12, 20, 44, 56, 90],
+        },
+        MQ3: {
+          active: false,
+          readers: [49, 28, 33, 56, 120],
+        },
+      };
+
+      const wsclient = new WebSocket("ws://127.0.0.1:3000/sensors");
 
       wsclient.addEventListener("open", () => {
         console.log("Conexão WebSocket aberta.");
@@ -33,7 +44,7 @@
       });
 
       setInterval(() => {
-        wsclient.send("");
+        wsclient.send(JSON.stringify(readers));
       }, 5000);
     </script>
   </body>

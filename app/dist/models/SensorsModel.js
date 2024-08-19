@@ -8,7 +8,7 @@ export default class SensorsModel extends AbstractModel {
                 const sensors = [];
                 for await (const sensorsQuery of this.connection.query("SELECT * FROM sensors")) {
                     sensorsQuery.forEach((sensor) => {
-                        sensors.push(new Sensor(sensor.id, sensor.name));
+                        sensors.push(new Sensor(sensor.id, sensor.name, sensor.active));
                     });
                 }
                 return sensors;
@@ -25,12 +25,27 @@ export default class SensorsModel extends AbstractModel {
     static async getSpecifySensor(id) {
         try {
             this.setup();
+            const SQL = `SELECT * FROM sensors WHERE id = ${id}`;
             if (this.status) {
-                for await (const sensorQuery of this.connection.query(`SELECT * FROM sensors WHERE id = ${id}`)) {
-                    return new Sensor(sensorQuery[0].id, sensorQuery[0].name);
+                for await (const sensorQuery of this.connection.query(SQL)) {
+                    return new Sensor(sensorQuery[0].id, sensorQuery[0].name, sensorQuery[0].active);
                 }
             }
             return null;
+        }
+        catch (error) {
+            console.log(`Error: ${error}`);
+            return null;
+        }
+        finally {
+            this.connection.close();
+        }
+    }
+    static async insertNewReadings() {
+        try {
+            this.setup();
+            if (this.status) {
+            }
         }
         catch (error) {
             console.log(`Error: ${error}`);

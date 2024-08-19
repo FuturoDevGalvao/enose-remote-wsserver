@@ -20,18 +20,22 @@ connection.connect(function (err) {
   }
 
   console.log(
-    "connected as id " + connection.threadId + "\nhost: " + process.env.DB_HOST + "\nport: " + process.env.DB_PORT
+    "connected as id " +
+      connection.threadId +
+      "\nhost: " +
+      process.env.DB_HOST +
+      "\nport: " +
+      process.env.DB_PORT
   );
 
-  connection.query(
-    `INSERT INTO users (name, email, password_hash, validation_token) VALUES 
-        ('biel', 'biel@gmail.com', '123456', '12345678901234567892345678912343'), 
-        ('allyce', 'lyce@gmail.com', '12345678', '12345678901234567892345678912343');`,
-    function (error, results, fields) {
-      if (error) throw error;
+  const SQL = `INSERT INTO sensors (name, active) VALUES ("MQ5", true), ("MQ3", false)`;
 
-      console.log(results);
-      connection.end(); // Close the connection after the query is complete
-    }
-  );
+  connection.query(SQL, (err, rows) => {
+    if (err) throw new Error(`Erro ao tentar executar a query: ${err.stack}`);
+
+    console.log(`Resultado da consulta: ${rows}`);
+    console.log(rows);
+  });
+
+  connection.end();
 });

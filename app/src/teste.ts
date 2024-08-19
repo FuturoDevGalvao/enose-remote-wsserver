@@ -1,7 +1,12 @@
-import SensorsModel from "../models/SensorsModel.js";
-import UserModel from "../models/UserModel.js";
+const readers = {
+  MQ5: {
+    active: true,
+    readers: [12, 20, 44, 56, 90],
+  },
+  MQ3: {
+    active: false,
+    readers: [49, 28, 33, 56, 120],
+  },
+};
 
-(async () => {
-  console.log(await SensorsModel.getAllSensors());
-  console.log(await SensorsModel.getSpecifySensor(1));
-})();
+console.log(JSON.stringify(readers));

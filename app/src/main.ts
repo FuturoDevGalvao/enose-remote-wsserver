@@ -1,48 +1,49 @@
 import UserController from "../controllers/UserController.js";
-import { wsserver } from "../server/wsserver.js";
-import url from "url";
 import SensorController from "../controllers/SensorsController.js";
+import { wsserver } from "../server/wsserver.js";
+import UserService from "../services/UserService.js";
+import url from "url";
 
-wsserver.on("connection", async (ws, req) => {
-  const parsedUrl: url.UrlWithParsedQuery = url.parse(req.url, true); // Analisa a URL, incluindo os parâmetros de consulta
-  const uri: string = parsedUrl.pathname; // Obtém o caminho da URL
-  const queryParams = parsedUrl.query; // Obtém os parâmetros de consulta como um objeto
+const userService = new UserService();
+
+wsserver.on("connection", async (ws: any, req: any) => {
+  const parsedUrl: url.UrlWithParsedQuery = url.parse(req.url, true);
+  const uri: string = parsedUrl.pathname;
+  const queryParams = parsedUrl.query;
 
   console.log(`Nova conexão na rota: ${uri}`);
   console.log(`Query params: ${JSON.stringify(queryParams)}`);
 
-  ws.on("message", async (message) => {
+  ws.on("message", async (message: any) => {
     console.log(`Received message => ${message}`);
     console.log(`For uri => ${uri}`);
 
     try {
       switch (uri) {
         case "/users":
-          const users = await UserController.get();
-          ws.send(UserController.render(users));
+          await UserController.handleUserRequests(ws, queryParams);
           break;
+
         case "/sensors":
-          const sensors = await SensorController.get();
-          ws.send(SensorController.render(sensors));
+          await SensorController.handleSensorRequests(ws, queryParams, message);
           break;
 
         default:
-          throw new Error(
-            `A uri ${uri} é inválida, por favor, reveja o pathname e tente novamente.`
+          ws.send(
+            JSON.stringify({
+              status: 400,
+              error: `Invalid URI ${uri}, please review and try again.`,
+            })
           );
+          console.error(`Invalid URI: ${uri}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      ws.send(`Error: ${error}`);
+      ws.send(JSON.stringify({ status: 500, error: `Error: ${error.message}` }));
     }
   });
-});
-/* 
-setInterval(() => {
-  UserController.get();
-}, 2000);
 
-setInterval(() => {
-  UserController.get(2);
-}, 3000);
-*/
+  ws.on("close", () => {
+    console.log(`Client ${ws} disconnected.`);
+  });
+});
